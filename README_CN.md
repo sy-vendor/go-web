@@ -36,7 +36,7 @@ $ git clone https://github.com/sy-vendor/go-web
 
 $ cd gin-web
 
-# OR 使用go命令运行
+# 使用go命令运行
 $ go run cmd/gin-web/main.go web
 ```
 
