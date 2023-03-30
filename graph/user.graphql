@@ -1,0 +1,18 @@
+type User {
+    id: ID!
+    name: String!
+    sex: Boolean!
+    age: Int!
+    Account: String!
+    Password: String!
+}
+
+extend type Query {
+    "find user by account"
+    userByAccount(account: String!): User!
+}
+
+extend type Mutation {
+    "update user account password"
+    updatePasswordByAccount(account: String!, password: String!): User!
+}
