@@ -34,10 +34,10 @@ go get -u github.com/google/wire/cmd/wire
 ```bash
 $ git clone https://github.com/sy-vendor/go-web
 
-$ cd gin-web
+$ cd go-web
 
 # 使用go命令运行
-$ go run cmd/gin-web/main.go web
+$ go run cmd/go-web/main.go
 ```
 
 ## 生成依赖注入文件
