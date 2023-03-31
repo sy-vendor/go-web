@@ -4,6 +4,7 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go-web/ent"
 	"strconv"
@@ -17,7 +18,7 @@ import (
 // region    ************************** generated!.gotpl **************************
 
 type MutationResolver interface {
-	UpdatePasswordByAccount(ctx context.Context, account string, password string) (*ent.User, error)
+	UpdatePasswordByAccount(ctx context.Context, account string, password string) (bool, error)
 }
 type QueryResolver interface {
 	UserByAccount(ctx context.Context, account string) (*ent.User, error)
@@ -115,9 +116,9 @@ func (ec *executionContext) _Mutation_updatePasswordByAccount(ctx context.Contex
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*ent.User)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgoᚑwebᚋentᚐUser(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePasswordByAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -127,21 +128,7 @@ func (ec *executionContext) fieldContext_Mutation_updatePasswordByAccount(ctx co
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "name":
-				return ec.fieldContext_User_name(ctx, field)
-			case "sex":
-				return ec.fieldContext_User_sex(ctx, field)
-			case "age":
-				return ec.fieldContext_User_age(ctx, field)
-			case "Account":
-				return ec.fieldContext_User_Account(ctx, field)
-			case "Password":
-				return ec.fieldContext_User_Password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	defer func() {

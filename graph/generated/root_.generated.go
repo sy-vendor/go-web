@@ -231,7 +231,7 @@ extend type Query {
 
 extend type Mutation {
     "update user account password"
-    updatePasswordByAccount(account: String!, password: String!): User!
+    updatePasswordByAccount(account: String!, password: String!): Boolean!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

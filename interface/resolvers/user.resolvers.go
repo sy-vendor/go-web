@@ -6,14 +6,21 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	"go-web/ent"
 	"go-web/ent/user"
 )
 
 // UpdatePasswordByAccount is the resolver for the updatePasswordByAccount field.
-func (r *mutationResolver) UpdatePasswordByAccount(ctx context.Context, account string, password string) (*ent.User, error) {
-	panic(fmt.Errorf("not implemented: UpdatePasswordByAccount - updatePasswordByAccount"))
+func (r *mutationResolver) UpdatePasswordByAccount(ctx context.Context, account string, password string) (bool, error) {
+	_, err := r.client.User.Query().Where(user.Account(account)).First(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	if err := r.client.User.Update().Where(user.Account(account)).SetPassword(password).Exec(ctx); err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // UserByAccount is the resolver for the userByAccount field.
