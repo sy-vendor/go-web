@@ -1,6 +1,6 @@
 # go-web
 
-> RBAC scaffolding based on GIN + Ent + Graph + WIRE (DI).
+> go-web based on GIN + Ent + Graph + WIRE (DI).
 
 English | [中文](README_CN.md)
 
