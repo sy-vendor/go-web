@@ -1,6 +1,6 @@
 # go-web
 
-> 基于 GIN + ENT + GRAPH + WIRE 实现的RBAC权限管理脚手架，目标是提供一套轻量的中后台开发框架，方便、快速的完成业务需求的开发。
+> 基于 GIN + ENT + GRAPH + WIRE 实现的go-web框架，目标是提供一套轻量的中后台开发框架，方便、快速的完成业务需求的开发。
 
 [English](README.md) | 中文
 
@@ -43,8 +43,9 @@ $ go run cmd/apiserver/main.go
 ## 生成依赖注入文件
 
 ```bash
+cd ./cmd/apiserver
 #  使用wire命令
-wire gen ./cmd/apiserver/
+wire
 ```
 
 ## 快速生成数据表
