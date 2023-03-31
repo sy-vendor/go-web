@@ -91,4 +91,5 @@ go run ./cmd/apiserver/main.go
 #### API request testing
 ```
 https://studio.apollographql.com/
+https://studio.apollographql.com/sandbox/explorer
 ```

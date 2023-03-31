@@ -102,4 +102,5 @@ go run ./main.go
 #### API请求测试
 ```
 https://studio.apollographql.com/
+https://studio.apollographql.com/sandbox/explorer
 ```
