@@ -93,5 +93,10 @@ go run github.com/99designs/gqlgen generate
 make ./cmd/apiserver/wire
 
 # 运行服务
-make start
+go run ./cmd/apiserver/main.go
+```
+
+#### API请求测试
+```
+https://studio.apollographql.com/
 ```
