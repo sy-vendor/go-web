@@ -84,8 +84,6 @@ extend type Mutation {
 ```bash
 go run github.com/99designs/gqlgen generate
 
-make ./cmd/apiserver/wire
-
 go run ./cmd/apiserver/main.go
 ```
 
