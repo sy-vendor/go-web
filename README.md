@@ -33,9 +33,9 @@ go get -u github.com/google/wire/cmd/wire
 ```bash
 $ git clone https://github.com/sy-vendor/go-web
 
-$ cd gin-web
+$ cd go-web
 
-$ go run cmd/gin-web/main.go web
+$ go run cmd/go-web/main.go
 ```
 
 ### Use `wire` to generate dependency injection
