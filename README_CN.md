@@ -37,7 +37,7 @@ $ git clone https://github.com/sy-vendor/go-web
 $ cd go-web
 
 # 使用go命令运行
-$ go run cmd/go-web/main.go
+$ go run cmd/apiserver/main.go
 ```
 
 ## 生成依赖注入文件
