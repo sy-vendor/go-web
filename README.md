@@ -41,7 +41,8 @@ $ go run cmd/apiserver/main.go
 ### Use `wire` to generate dependency injection
 
 ```bash
-wire gen ./cmd/apiserver/
+cd ./cmd/apiserver
+wire
 ```
 
 ### Create Database: `user.go`
