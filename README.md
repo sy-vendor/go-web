@@ -35,7 +35,7 @@ $ git clone https://github.com/sy-vendor/go-web
 
 $ cd go-web
 
-$ go run cmd/go-web/main.go
+$ go run cmd/apiserver/main.go
 ```
 
 ### Use `wire` to generate dependency injection
