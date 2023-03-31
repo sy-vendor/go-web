@@ -1,4 +1,4 @@
-# gin-web
+# go-web
 
 > RBAC scaffolding based on GIN + Ent + Graph + WIRE (DI).
 
