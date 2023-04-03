@@ -12,7 +12,6 @@ English | [中文](README_CN.md)
 - Supports multiple query languages, scalability, and multiple APIs with `GRAPH`.
 - Use `Wire` to resolve dependencies between modules
 - Uses `Migrate` for database version control
-- Support `Swagger`
 
 ## Dependent Tools
 
