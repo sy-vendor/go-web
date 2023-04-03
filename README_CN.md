@@ -90,9 +90,7 @@ extend type Mutation {
 go run github.com/99designs/gqlgen generate
 
 # 生成依赖项
-cs ./cmd/apiserver
-
-wire
+wire ./cmd/apiserver
 
 # 运行服务
 go run ./main.go
