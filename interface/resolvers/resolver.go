@@ -3,6 +3,7 @@ package resolvers
 import (
 	"go-web/ent"
 	generated "go-web/graph/generated"
+	"go-web/pkg/redis"
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -15,15 +16,17 @@ import (
 
 type Resolver struct {
 	client *ent.Client
+	rdb    redis.Service
 }
 
 const maxQueryComplexity = 300
 
 // NewConfig
-func NewConfig(client *ent.Client) *generated.Config {
+func NewConfig(client *ent.Client, rdb redis.Service) *generated.Config {
 	return &generated.Config{
 		Resolvers: &Resolver{
 			client: client,
+			rdb:    rdb,
 		},
 	}
 }

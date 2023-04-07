@@ -14,6 +14,7 @@ import (
 	"go-web/interface/router"
 	"go-web/pkg/log"
 	"go-web/pkg/mysql"
+	"go-web/pkg/redis"
 )
 
 // Injectors from wire.go:
@@ -22,7 +23,8 @@ func Create() (*go_web.Server, error) {
 	context := go_web.NewTopLevelCtx()
 	logger := log.NewLogger()
 	client := mysql.NewMysql(logger)
-	config := resolvers.NewConfig(client)
+	service := redis.NewRedis(context)
+	config := resolvers.NewConfig(client, service)
 	server := resolvers.NewGraphqlHandler(config, client)
 	initRoutersFunc := router.CreateInitRoutesFunc(server)
 	engine := http.NewRouter(logger, initRoutersFunc)
@@ -33,4 +35,4 @@ func Create() (*go_web.Server, error) {
 
 // wire.go:
 
-var providerSet = wire.NewSet(log.ProviderSet, go_web.ProviderSet, http.ProviderSet, mysql.ProviderSet, router.ProviderSet)
+var providerSet = wire.NewSet(log.ProviderSet, go_web.ProviderSet, http.ProviderSet, mysql.ProviderSet, redis.ProviderSet, router.ProviderSet)

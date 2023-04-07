@@ -9,6 +9,7 @@ import (
 	"go-web/interface/router"
 	"go-web/pkg/log"
 	"go-web/pkg/mysql"
+	"go-web/pkg/redis"
 
 	"github.com/google/wire"
 )
@@ -18,6 +19,7 @@ var providerSet = wire.NewSet(
 	go_web.ProviderSet,
 	http.ProviderSet,
 	mysql.ProviderSet,
+	redis.ProviderSet,
 	router.ProviderSet,
 )
 
