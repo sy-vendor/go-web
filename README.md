@@ -6,7 +6,6 @@ English | [中文](README_CN.md)
 
 ## Features
 
-- Follow the `RESTful API` design specification
 - Provides rich `Gin` middlewares (CORS)
 - Simplifies the interaction between the application and database with `ENT`, and automatically generates model code.
 - Supports multiple query languages, scalability, and multiple APIs with `GRAPH`.
