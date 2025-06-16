@@ -77,6 +77,17 @@ func T(c *gin.Context, key string) string {
 	return key
 }
 
+// TByLang 通过 lang 获取多语言消息
+func TByLang(lang, key string) string {
+	if msg, ok := messages[lang][key]; ok {
+		return msg
+	}
+	if msg, ok := messages["en"][key]; ok {
+		return msg
+	}
+	return key
+}
+
 // ErrorResponse 返回国际化错误响应
 func ErrorResponse(c *gin.Context, err error) {
 	if e, ok := err.(*errors.Error); ok {
