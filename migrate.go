@@ -27,7 +27,7 @@ func Migrate(cfg *config.Config) error {
 	logger := log.NewLogger()
 	logger.Info("starting database migration",
 		zap.Uint("target_version", version),
-		zap.String("database", cfg.Database.Database),
+		zap.String("database", cfg.MySQL.Database),
 	)
 
 	sourceInstance, err := iofs.New(fs, "migrations")
@@ -36,7 +36,7 @@ func Migrate(cfg *config.Config) error {
 	}
 	defer sourceInstance.Close()
 
-	db, err := sql.Open("mysql", cfg.Database.GetDSN())
+	db, err := sql.Open("mysql", cfg.GetDSN())
 	if err != nil {
 		return fmt.Errorf("failed to open database connection: %w", err)
 	}
