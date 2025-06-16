@@ -1,22 +1,32 @@
 server:
-  port: 8080
+  addr: ":8080"
   read_timeout: 5s
   write_timeout: 10s
-
-database:
-  host: localhost
-  port: 3306
-  user: root
-  password: password
-  database: go_web
-  max_open_conns: 25
-  max_idle_conns: 25
-  max_lifetime: 5m
+  idle_timeout: 120s
 
 log:
   level: info
-  filename: logs/app.log
-  max_size: 100
-  max_backups: 3
-  max_age: 7
-  compress: true 
+  filename: "logs/app.log"
+  console: true
+  file: true
+  caller: true
+  stacktrace: false
+
+mysql:
+  addr: "localhost:3306"
+  username: "root"
+  password: "password"
+  database: "go_web"
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 1h
+
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
+  pool_size: 10
+  min_idle_conns: 5
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s 
