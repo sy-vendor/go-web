@@ -1,5 +1,7 @@
 # Go Web GraphQL Backend
 
+English | [中文](README_CN.md)
+
 A modern Go web backend featuring:
 - **GraphQL API** powered by [gqlgen](https://github.com/99designs/gqlgen)
 - **Ent ORM** for database modeling
