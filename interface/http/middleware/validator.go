@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"go-web/pkg/i18n"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -47,9 +49,7 @@ func Validator(logger *zap.Logger, config *ValidatorConfig) gin.HandlerFunc {
 					zap.Error(err),
 					zap.String("path", c.Request.URL.Path),
 				)
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": "无效的请求体格式",
-				})
+				i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", "无效的请求体格式")
 				c.Abort()
 				return
 			}
@@ -140,10 +140,7 @@ func handleValidationError(c *gin.Context, err error, config *ValidatorConfig, l
 			zap.Any("errors", errors),
 		)
 
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "请求参数验证失败",
-			"details": errors,
-		})
+		i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", fmt.Sprintf("%v", errors))
 	} else {
 		// 只返回简单错误信息
 		logger.Warn("validation failed",
@@ -151,9 +148,7 @@ func handleValidationError(c *gin.Context, err error, config *ValidatorConfig, l
 			zap.String("path", c.Request.URL.Path),
 		)
 
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "请求参数验证失败",
-		})
+		i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", "请求参数验证失败")
 	}
 	c.Abort()
 }
