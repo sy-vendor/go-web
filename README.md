@@ -1,128 +1,61 @@
-# Go-Web
+# Go Web GraphQL Backend
 
-> A modern web application framework based on GIN + Ent + GraphQL + WIRE (DI).
-
-English | [中文](README_CN.md)
-
-## Overview
-
-Go-Web is a powerful and modern web application framework built with Go. It combines the best practices and popular libraries to provide a robust foundation for building scalable web applications.
+A modern Go web backend featuring:
+- **GraphQL API** powered by [gqlgen](https://github.com/99designs/gqlgen)
+- **Ent ORM** for database modeling
+- **Redis** for Automatic Persisted Query (APQ) caching
+- **Custom error handling** and i18n
+- **Developer experience** enhancements (Playground, hot reload, etc.)
 
 ## Features
+- GraphQL API with schema-first development
+- Ent ORM integration
+- Redis APQ cache for persisted queries
+- Unified error handling and internationalization
+- GraphQL Playground for API exploration
+- Transaction and query complexity middleware
 
-- 🚀 **High Performance**: Built on top of Gin, one of the fastest web frameworks for Go
-- 🔄 **Rich Middleware**: Built-in CORS and other essential middleware support
-- 🗄️ **Powerful ORM**: Simplified database operations with Ent, featuring automatic code generation
-- 🔍 **Flexible API**: GraphQL support for flexible and efficient data querying
-- 🎯 **Dependency Injection**: Clean architecture with Wire for compile-time dependency injection
-- 📦 **Database Migrations**: Built-in database version control system
+## Getting Started
 
-## Tech Stack
+### Prerequisites
+- Go 1.18+
+- Redis
+- (Optional) a SQL database supported by Ent
 
-- [Gin](https://gin-gonic.com/) - The fastest full-featured web framework for Go
-- [Wire](https://github.com/google/wire) - Compile-time Dependency Injection for Go
-- [GraphQL](https://github.com/graphql) - A query language for APIs
-- [Ent](https://github.com/ent) - An entity framework for Go
-
-## Prerequisites
-
-- Go 1.16 or higher
-- Wire CLI tool
-
-```bash
-go get -u github.com/google/wire/cmd/wire
-```
-
-## Quick Start
-
-1. Clone the repository:
-```bash
-git clone https://github.com/sy-vendor/go-web
+### Installation
+```sh
+git clone <your-repo-url>
 cd go-web
+make install # or go mod tidy
 ```
 
-2. Install dependencies:
-```bash
-go mod download
+### Configuration
+- Edit `.env` for database and Redis connection settings.
+
+### Running
+```sh
+make run # or go run main.go
 ```
 
-3. Generate dependency injection code:
-```bash
-wire ./cmd/apiserver
-```
+- GraphQL endpoint: `POST /query`
+- Playground: `GET /playground`
 
-4. Run the application:
-```bash
-go run cmd/apiserver/main.go
+### Development
+- Hot reload: use [air](https://github.com/cosmtrek/air) or [fresh](https://github.com/gravityblast/fresh)
+- Schema changes: edit `graph/*.graphql`, then run `make generate`
+- Add resolvers in `interface/resolvers/`
+
+### Testing
+```sh
+make test
 ```
 
 ## Project Structure
-
-```
-.
-├── cmd/            # Application entry points
-├── pkg/            # Core business logic
-├── interface/      # Interface layer
-├── graph/          # GraphQL definitions
-├── ent/            # Data models
-├── migrations/     # Database migrations
-└── server.go       # Server configuration
-```
-
-## Development Guide
-
-### Creating a New Entity
-
-1. Initialize a new entity:
-```bash
-ent init User
-```
-
-2. Modify the schema in `./ent/schema/user.go`
-
-3. Generate the entity code:
-```bash
-go generate ./ent
-```
-
-### Adding GraphQL Types
-
-1. Create a new GraphQL type definition in `graph/` directory:
-
-```graphql
-type User {
-    id: ID!
-    name: String!
-    sex: Boolean!
-    age: Int!
-    Account: String!
-    Password: String!
-}
-
-extend type Query {
-    userByAccount(account: String!): User!
-}
-
-extend type Mutation {
-    updatePasswordByAccount(account: String!, password: String!): User!
-}
-```
-
-2. Generate GraphQL code:
-```bash
-go run github.com/99designs/gqlgen generate
-```
-
-### Testing the API
-
-You can test the GraphQL API using:
-- [Apollo Studio](https://studio.apollographql.com/)
-- [Apollo Sandbox](https://studio.apollographql.com/sandbox/explorer)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- `graph/` - GraphQL schema and generated code
+- `interface/resolvers/` - Resolver implementations
+- `pkg/redis/` - Redis APQ cache
+- `pkg/errors/` - Custom error types
+- `pkg/i18n/` - Internationalization
 
 ## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT
