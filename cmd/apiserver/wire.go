@@ -7,6 +7,7 @@ import (
 	go_web "go-web"
 	"go-web/interface/http"
 	"go-web/interface/router"
+	"go-web/pkg/cache"
 	"go-web/pkg/config"
 	"go-web/pkg/log"
 	"go-web/pkg/mysql"
@@ -22,6 +23,7 @@ func Create(cfg *config.Config) (*go_web.Server, error) {
 		log.ProviderSet,
 		mysql.ProviderSet,
 		redis.ProviderSet,
+		cache.ProviderSet,
 		router.ProviderSet,
 	)
 	return nil, nil

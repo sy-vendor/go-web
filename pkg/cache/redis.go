@@ -8,6 +8,7 @@ import (
 
 	"go-web/pkg/config"
 
+	"github.com/google/wire"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
@@ -146,3 +147,5 @@ func (c *RedisClient) Close() error {
 	}
 	return nil
 }
+
+var ProviderSet = wire.NewSet(NewRedisClient)

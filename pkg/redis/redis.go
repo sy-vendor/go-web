@@ -23,7 +23,12 @@ type Service interface {
 	GetRDB() *rd.Client
 }
 
-var ProviderSet = wire.NewSet(NewRedis)
+// ProvideGoRedisClient 提供底层的 redis.Client
+func ProvideGoRedisClient(s Service) *rd.Client {
+	return s.GetRDB()
+}
+
+var ProviderSet = wire.NewSet(NewRedis, ProvideGoRedisClient)
 
 // NewRedis Init redis service
 func NewRedis(ctx context.Context) Service {
