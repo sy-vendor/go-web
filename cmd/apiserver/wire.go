@@ -7,6 +7,7 @@ import (
 	go_web "go-web"
 	"go-web/interface/http"
 	"go-web/interface/router"
+	"go-web/pkg/config"
 	"go-web/pkg/log"
 	"go-web/pkg/mysql"
 	"go-web/pkg/redis"
@@ -14,15 +15,14 @@ import (
 	"github.com/google/wire"
 )
 
-var providerSet = wire.NewSet(
-	log.ProviderSet,
-	go_web.ProviderSet,
-	http.ProviderSet,
-	mysql.ProviderSet,
-	redis.ProviderSet,
-	router.ProviderSet,
-)
-
-func Create() (*go_web.Server, error) {
-	panic(wire.Build(providerSet))
+func Create(cfg *config.Config) (*go_web.Server, error) {
+	wire.Build(
+		go_web.ProviderSet,
+		http.ProviderSet,
+		log.ProviderSet,
+		mysql.ProviderSet,
+		redis.ProviderSet,
+		router.ProviderSet,
+	)
+	return nil, nil
 }

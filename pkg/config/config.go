@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
 
@@ -46,6 +47,8 @@ type LogConfig struct {
 var (
 	config *Config
 )
+
+var ProviderSet = wire.NewSet(Load)
 
 // Load loads the configuration from the environment and config file
 func Load() (*Config, error) {
