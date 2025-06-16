@@ -29,8 +29,8 @@ func NewMysql(cfg *config.Config, logger *zap.Logger) *ent.Client {
 		var d *sql.DB
 
 		// 使用配置中的数据库连接信息
-		dbConfig := cfg.Database
-		dsn := dbConfig.GetDSN()
+		dbConfig := cfg.MySQL
+		dsn := cfg.GetDSN()
 
 		// 根据配置决定是否使用日志记录器
 		if cfg.Log.Level == "debug" {
@@ -46,7 +46,7 @@ func NewMysql(cfg *config.Config, logger *zap.Logger) *ent.Client {
 		}
 
 		// 使用配置中的连接池设置
-		d.SetConnMaxLifetime(dbConfig.MaxLifetime)
+		d.SetConnMaxLifetime(dbConfig.ConnMaxLifetime)
 		d.SetMaxOpenConns(dbConfig.MaxOpenConns)
 		d.SetMaxIdleConns(dbConfig.MaxIdleConns)
 
@@ -59,12 +59,11 @@ func NewMysql(cfg *config.Config, logger *zap.Logger) *ent.Client {
 		}
 
 		logger.Info("database connection established",
-			zap.String("host", dbConfig.Host),
-			zap.Int("port", dbConfig.Port),
+			zap.String("addr", dbConfig.Addr),
 			zap.String("database", dbConfig.Database),
 			zap.Int("max_open_conns", dbConfig.MaxOpenConns),
 			zap.Int("max_idle_conns", dbConfig.MaxIdleConns),
-			zap.Duration("max_lifetime", dbConfig.MaxLifetime),
+			zap.Duration("conn_max_lifetime", dbConfig.ConnMaxLifetime),
 		)
 
 		db = ent.NewClient(ent.Driver(ent_sql.OpenDB(dialect.MySQL, d)))
