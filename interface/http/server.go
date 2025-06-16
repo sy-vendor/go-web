@@ -60,8 +60,16 @@ func NewServer(logger *zap.Logger, router *gin.Engine) *Server {
 
 func (server *Server) StartServer() {
 	go func() {
-		if err := server.httpServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			server.logger.Fatal("http server listen and serve error", zap.Error(err))
+		server.logger.Info("starting http server", zap.String("addr", server.httpServer.Addr))
+		if err := server.httpServer.ListenAndServe(); err != nil {
+			if errors.Is(err, http.ErrServerClosed) {
+				server.logger.Info("http server closed")
+				return
+			}
+			server.logger.Error("http server error",
+				zap.Error(err),
+				zap.String("addr", server.httpServer.Addr),
+			)
 		}
 	}()
 }

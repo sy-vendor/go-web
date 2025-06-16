@@ -34,7 +34,11 @@ func NewConfig(client *ent.Client, rdb redis.Service) *generated.Config {
 // NewGraphqlHandler
 func NewGraphqlHandler(c *generated.Config, client *ent.Client) *handler.Server {
 	if c == nil {
-		panic("config is nil")
+		panic("graphql config is required")
+	}
+
+	if client == nil {
+		panic("ent client is required")
 	}
 
 	h := handler.NewDefaultServer(generated.NewExecutableSchema(*c))
