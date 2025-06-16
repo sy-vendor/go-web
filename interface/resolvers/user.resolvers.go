@@ -6,24 +6,52 @@ package resolvers
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
 	"go-web/ent"
 	"go-web/ent/user"
 )
 
 // UpdatePasswordByAccount is the resolver for the updatePasswordByAccount field.
 func (r *mutationResolver) UpdatePasswordByAccount(ctx context.Context, account string, password string) (bool, error) {
+	// 验证账号是否存在
 	_, err := r.client.User.Query().Where(user.Account(account)).First(ctx)
 	if err != nil {
-		return false, err
+		if ent.IsNotFound(err) {
+			return false, fmt.Errorf("user with account %s not found", account)
+		}
+		return false, fmt.Errorf("failed to query user: %w", err)
 	}
 
-	if err := r.client.User.Update().Where(user.Account(account)).SetPassword(password).Exec(ctx); err != nil {
-		return false, err
+	// 验证密码是否为空
+	if password == "" {
+		return false, errors.New("password cannot be empty")
 	}
+
+	// 更新密码
+	if err := r.client.User.Update().Where(user.Account(account)).SetPassword(password).Exec(ctx); err != nil {
+		return false, fmt.Errorf("failed to update password: %w", err)
+	}
+
 	return true, nil
 }
 
 // UserByAccount is the resolver for the userByAccount field.
 func (r *queryResolver) UserByAccount(ctx context.Context, account string) (*ent.User, error) {
-	return r.client.User.Query().Where(user.Account(account)).First(ctx)
+	// 验证账号是否为空
+	if account == "" {
+		return nil, errors.New("account cannot be empty")
+	}
+
+	// 查询用户
+	u, err := r.client.User.Query().Where(user.Account(account)).First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, fmt.Errorf("user with account %s not found", account)
+		}
+		return nil, fmt.Errorf("failed to query user: %w", err)
+	}
+
+	return u, nil
 }
