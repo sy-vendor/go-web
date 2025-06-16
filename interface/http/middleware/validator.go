@@ -7,6 +7,8 @@ import (
 
 	"go-web/pkg/i18n"
 
+	"go-web/pkg/errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -49,7 +51,7 @@ func Validator(logger *zap.Logger, config *ValidatorConfig) gin.HandlerFunc {
 					zap.Error(err),
 					zap.String("path", c.Request.URL.Path),
 				)
-				i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", "无效的请求体格式")
+				i18n.ErrorResponse(c, errors.New(errors.ErrInvalidParam, "invalid_param", fmt.Sprintf("%v", err)))
 				c.Abort()
 				return
 			}
@@ -115,32 +117,17 @@ func validateQueryParams(c *gin.Context, validate *validator.Validate, config *V
 // handleValidationError 处理验证错误
 func handleValidationError(c *gin.Context, err error, config *ValidatorConfig, logger *zap.Logger) {
 	if config.ShowDetailedErrors {
-		// 获取详细的错误信息
-		errors := make(map[string]string)
-		for _, err := range err.(validator.ValidationErrors) {
-			field := err.Field()
-			tag := err.Tag()
-			param := err.Param()
-
-			// 获取自定义错误消息
-			message := config.CustomErrorMessages[tag]
-			if message == "" {
-				message = fmt.Sprintf("字段 %s 验证失败", field)
-			} else {
-				message = fmt.Sprintf(message, field, param)
+		// 获取详细的验证错误信息
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			var errorMessages []string
+			for _, e := range validationErrors {
+				errorMessages = append(errorMessages, formatValidationError(e))
 			}
-
-			errors[field] = message
+			i18n.ErrorResponse(c, errors.New(errors.ErrInvalidParam, "invalid_param", strings.Join(errorMessages, "; ")))
+		} else {
+			i18n.ErrorResponse(c, errors.New(errors.ErrInvalidParam, "invalid_param", err.Error()))
 		}
-
-		// 记录错误日志
-		logger.Warn("validation failed",
-			zap.Error(err),
-			zap.String("path", c.Request.URL.Path),
-			zap.Any("errors", errors),
-		)
-
-		i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", fmt.Sprintf("%v", errors))
+		c.Abort()
 	} else {
 		// 只返回简单错误信息
 		logger.Warn("validation failed",
@@ -148,7 +135,24 @@ func handleValidationError(c *gin.Context, err error, config *ValidatorConfig, l
 			zap.String("path", c.Request.URL.Path),
 		)
 
-		i18n.ErrorResponse(c, http.StatusBadRequest, "invalid_param", "请求参数验证失败")
+		i18n.ErrorResponse(c, errors.New(errors.ErrInvalidParam, "invalid_param", "请求参数验证失败"))
+		c.Abort()
 	}
-	c.Abort()
+}
+
+// formatValidationError 格式化验证错误信息
+func formatValidationError(err validator.FieldError) string {
+	field := err.Field()
+	switch err.Tag() {
+	case "required":
+		return fmt.Sprintf("%s is required", field)
+	case "email":
+		return fmt.Sprintf("%s must be a valid email address", field)
+	case "min":
+		return fmt.Sprintf("%s must be at least %s characters", field, err.Param())
+	case "max":
+		return fmt.Sprintf("%s must be at most %s characters", field, err.Param())
+	default:
+		return fmt.Sprintf("%s failed validation: %s", field, err.Tag())
+	}
 }
