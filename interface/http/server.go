@@ -38,6 +38,8 @@ func NewRouter(logger *zap.Logger, initRoutersFunc InitRoutersFunc) *gin.Engine 
 
 	r.Use(middleware.RateLimit(logger, middleware.DefaultRateLimitConfig()))
 
+	r.Use(middleware.Logger(logger))
+
 	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{})))
 	r.Use(gin_zap.Ginzap(logger, time.RFC3339, true))
 	r.Use(middleware.Recovery(logger))
