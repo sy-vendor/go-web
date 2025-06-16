@@ -18,20 +18,31 @@ func Recovery(logger *zap.Logger) gin.HandlerFunc {
 				path := c.Request.URL.Path
 				method := c.Request.Method
 				clientIP := c.ClientIP()
+				requestID := c.GetString(RequestIDKey)
+
+				// 获取带有请求 ID 的 logger
+				reqLogger := logger
+				if l, exists := c.Get("logger"); exists {
+					if log, ok := l.(*zap.Logger); ok {
+						reqLogger = log
+					}
+				}
 
 				// 记录详细的错误信息
-				logger.Error("panic recovered",
+				reqLogger.Error("panic recovered",
 					zap.Any("error", err),
 					zap.String("path", path),
 					zap.String("method", method),
 					zap.String("client_ip", clientIP),
+					zap.String("request_id", requestID),
 					zap.String("stack", string(debug.Stack())),
 				)
 
 				// 返回 500 错误
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-					"code":    http.StatusInternalServerError,
-					"message": fmt.Sprintf("Internal Server Error: %v", err),
+					"code":       http.StatusInternalServerError,
+					"message":    fmt.Sprintf("Internal Server Error: %v", err),
+					"request_id": requestID,
 				})
 			}
 		}()
