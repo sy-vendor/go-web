@@ -54,6 +54,12 @@ func NewRouter(logger *zap.Logger, redisClient *cache.RedisClient, initRoutersFu
 	r.Use(middleware.Recovery(logger))
 	r.Use(middleware.Cors(middleware.DefaultCORSConfig()))
 
+	// 添加 Prometheus 性能监控中间件
+	r.Use(middleware.Metrics())
+
+	// 添加 /metrics 路由
+	r.GET("/metrics", middleware.MetricsHandler())
+
 	initRoutersFunc(r)
 
 	return r
