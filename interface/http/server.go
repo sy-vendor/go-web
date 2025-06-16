@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"go-web/interface/http/middleware"
+	"go-web/pkg/cache"
 
 	"github.com/gin-contrib/gzip"
 	gin_zap "github.com/gin-contrib/zap"
@@ -29,7 +30,7 @@ const closeWaitTime = 30 * time.Second
 
 type InitRoutersFunc func(r *gin.Engine)
 
-func NewRouter(logger *zap.Logger, initRoutersFunc InitRoutersFunc) *gin.Engine {
+func NewRouter(logger *zap.Logger, redisClient *cache.RedisClient, initRoutersFunc InitRoutersFunc) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.New()
@@ -45,6 +46,8 @@ func NewRouter(logger *zap.Logger, initRoutersFunc InitRoutersFunc) *gin.Engine 
 	r.Use(middleware.CSRF(logger, middleware.DefaultCSRFConfig()))
 
 	r.Use(middleware.Validator(logger, middleware.DefaultValidatorConfig()))
+
+	r.Use(middleware.Cache(logger, middleware.DefaultCacheConfig(redisClient)))
 
 	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{})))
 	r.Use(gin_zap.Ginzap(logger, time.RFC3339, true))
