@@ -15,6 +15,7 @@ import (
 	"go-web/pkg/log"
 	"go-web/pkg/mysql"
 	"go-web/pkg/redis"
+	"go-web/pkg/cache"
 )
 
 // Injectors from wire.go:
@@ -27,7 +28,11 @@ func Create(cfg *config.Config) (*go_web.Server, error) {
 	graphConfig := resolvers.NewConfig(client, service)
 	server := resolvers.NewGraphqlHandler(graphConfig, client)
 	initRoutersFunc := router.CreateInitRoutesFunc(server)
-	engine := http.NewRouter(logger, initRoutersFunc)
+	redisClient, err := cache.NewRedisClient(cfg, logger)
+	if err != nil {
+		return nil, err
+	}
+	engine := http.NewRouter(logger, redisClient, initRoutersFunc)
 	httpServer := http.NewServer(logger, engine)
 	go_webServer := go_web.NewServer(context, httpServer, logger, cfg)
 	return go_webServer, nil

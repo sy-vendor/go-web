@@ -26,7 +26,7 @@ func main() {
 	}()
 
 	// 加载配置
-	cfg, err := config.Load()
+	cfg, err := config.Load(logger)
 	if err != nil {
 		logger.Sugar().Errorf("config load error: %v", err)
 		os.Exit(1)
