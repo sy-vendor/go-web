@@ -36,7 +36,7 @@ func NewRouter(logger *zap.Logger, initRoutersFunc InitRoutersFunc) *gin.Engine 
 
 	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{})))
 	r.Use(gin_zap.Ginzap(logger, time.RFC3339, true))
-	r.Use(gin_zap.RecoveryWithZap(logger, true))
+	r.Use(middleware.Recovery(logger))
 	r.Use(middleware.Cors())
 
 	initRoutersFunc(r)
