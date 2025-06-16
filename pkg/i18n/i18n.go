@@ -1,8 +1,9 @@
 package i18n
 
 import (
-	"net/http"
 	"strings"
+
+	"go-web/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,18 +45,10 @@ func T(c *gin.Context, key string) string {
 
 // ErrorResponse 返回国际化错误响应
 func ErrorResponse(c *gin.Context, code int, key string, details interface{}) {
-	c.JSON(code, gin.H{
-		"code":    code,
-		"message": T(c, key),
-		"details": details,
-	})
+	response.Error(c, code, T(c, key), details)
 }
 
 // SuccessResponse 返回国际化成功响应
 func SuccessResponse(c *gin.Context, data interface{}) {
-	c.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"message": T(c, "success"),
-		"data":    data,
-	})
+	response.Success(c, data)
 }
