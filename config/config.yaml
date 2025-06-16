@@ -1,0 +1,22 @@
+server:
+  port: 8080
+  read_timeout: 5s
+  write_timeout: 10s
+
+database:
+  host: localhost
+  port: 3306
+  user: root
+  password: password
+  database: go_web
+  max_open_conns: 25
+  max_idle_conns: 25
+  max_lifetime: 5m
+
+log:
+  level: info
+  filename: logs/app.log
+  max_size: 100
+  max_backups: 3
+  max_age: 7
+  compress: true 
